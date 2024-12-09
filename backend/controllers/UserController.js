@@ -1,12 +1,13 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose');
+
 
 // helpers
 const createUserToken = require('../helpers/create-user-token');
 const getToken = require('../helpers/get-token');
 const getUserByToken = require('../helpers/get-user-by-token');
+const ObjectId = require('mongoose').Types.ObjectId
 
 module.exports = class UserController {
 
@@ -38,6 +39,7 @@ module.exports = class UserController {
         }
         if(password !== confirmpassword) {
             res.status(422).json({message: 'As senhas não conferem!'})
+            return;
         }
 
         // check if user exists
@@ -123,7 +125,7 @@ module.exports = class UserController {
     static async getUserById(req, res) {
         const id = req.params.id
         // Check if id is valid
-        if(!mongoose.Types.ObjectId.isValid(id)) {
+        if(!ObjectId.isValid(id)) {
             return res.status(400).json({message: 'ID inválido!'})
         }
 
@@ -144,6 +146,7 @@ module.exports = class UserController {
         const token = getToken(req)
         const user = await getUserByToken(token)
         const {name, email, phone, password, confirmpassword} = req.body
+        console.log(req.file)
         if(req.file) {
             user.image = req.file.filename
         }
@@ -186,7 +189,6 @@ module.exports = class UserController {
 
             user.password = passwordHash
         }
-
         
         try {
             
@@ -198,7 +200,5 @@ module.exports = class UserController {
             res.status(500).json({message: error})
             return
         }
-
-
     }
 }
