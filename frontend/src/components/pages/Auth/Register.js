@@ -30,7 +30,6 @@ function Register() {
           type="text"
           name="name"
           placeholder="Digite o seu nome"
-          required={false}
           handleOnChange={handleChange}
         />
         <Input
@@ -38,7 +37,6 @@ function Register() {
           type="email"
           name="email"
           placeholder="Digite o seu e-mail"
-          required={false}
           handleOnChange={handleChange}
         />
         <Input
@@ -46,7 +44,6 @@ function Register() {
           type="text"
           name="phone"
           placeholder="Digite o seu telefone"
-          required={false}
           handleOnChange={handleChange}
         />
         <Input
@@ -54,7 +51,6 @@ function Register() {
           type="password"
           name="password"
           placeholder="Digite a sua senha"
-          required={false}
           handleOnChange={handleChange}
         />
         <Input
@@ -62,7 +58,6 @@ function Register() {
           type="password"
           name="confirmpassword"
           placeholder="Digite a sua senha novamente"
-          required={false}
           handleOnChange={handleChange}
         />
         <input type="submit" value="Cadastrar" />

@@ -9,6 +9,7 @@
 .navbar_logo {
     display: flex;
     align-items: center;
+    margin-left: 1em;
 }
 
 .navbar_logo img {
@@ -39,4 +40,21 @@
 
 .navbar li:hover > a {
     color: #FFF;
+}
+
+.user_info {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    margin-right: 1em;
+}
+.user_info span {
+    color: #16479d;
+}
+.user_info h5 {
+    color: #000000;
+}
+
+.authenticated {
+    margin: 0 auto;
 }

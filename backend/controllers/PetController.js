@@ -16,7 +16,7 @@ module.exports = class PetController {
         const images = req.files
 
 
-        const availabe = true
+        const available = true
 
         // validations
         if(!name) {
@@ -50,7 +50,7 @@ module.exports = class PetController {
             age,
             weight,
             color,
-            availabe,
+            available,
             images: [],
             user: {
                 _id: user._id,
@@ -102,7 +102,7 @@ module.exports = class PetController {
 
     static async getPetById(req, res) {
         const id = req.params.id
-
+       
         if(!ObjectId.isValid(id)) {
             res.status(422).json({message: 'ID inválido!'})
             return
@@ -153,6 +153,7 @@ module.exports = class PetController {
         const token = getToken(req)
         const user = await getUserByToken(token)
         const id = req.params.id
+        
 
         // check if id is valid
         if(!ObjectId.isValid(id)) {
@@ -175,9 +176,18 @@ module.exports = class PetController {
         }
 
         // edit pet
-        const {name, age, weight, color, availabe} = req.body
+        const {name, age, weight, color} = req.body
         const images = req.files
 
+        // object that recieves form data to be updated
+        const updatedPet = {
+            name,
+            age,
+            weight,
+            color,
+            images: [],
+        }
+     
 
         // validations
         if(!name) {
@@ -199,23 +209,16 @@ module.exports = class PetController {
             res.status(422).json({message: 'A cor é obrigatória'})
             return;
         }
-        if(images.length === 0) {
-            res.status(422).json({message: "A imagem é obrigatória!"})
-            return
+        if (images && images.length > 0) {
+            updatedPet.images = [] // Apenas limpa o array de imagens se novas imagens forem enviadas
+            images.map((image) => {
+                updatedPet.images.push(image.filename)
+            })
+        } else {
+            // Se nenhuma nova imagem for enviada, não modifique o array de imagens
+            // Isso preservará as imagens antigas do pet
+            updatedPet.images = pet.images;
         } 
-
-        const updatedPet = {
-            name,
-            age,
-            weight,
-            color,
-            images: [],
-        }
-
-        images.map((image) => {
-            updatedPet.images.push(image.filename)
-        })
-
         await Pet.findByIdAndUpdate(id, updatedPet)
 
         res.status(200).json({message: 'Pet atualizado com sucesso!'})
@@ -279,7 +282,7 @@ module.exports = class PetController {
         }
 
         // conclude visit setting available to false
-        pet.availabe = false
+        pet.available = false
         await Pet.findByIdAndUpdate(id, pet)
 
         res.status(200).json({message: 'Visita concluida com sucesso!'})
